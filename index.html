@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>天气查询应用 | Tech Assessment 1</title>
+    <title>Weather App | Tech Assessment 1</title>
     <style>
-        /* 全局重置 */
+        /* Global Reset */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            font-family: 'Segoe UI', sans-serif;
         }
 
-        /* 动态渐变背景，根据天气变化色调 */
+        /* Dynamic Gradient Background */
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
@@ -29,7 +29,7 @@
             width: 100%;
         }
 
-        /* 标题样式 */
+        /* Header Styles */
         .header {
             text-align: center;
             margin-bottom: 30px;
@@ -42,7 +42,7 @@
             text-shadow: 0 2px 10px rgba(0,0,0,0.15);
         }
 
-        /* 搜索框优化 */
+        /* Search Bar Styles */
         .search-box {
             display: flex;
             gap: 10px;
@@ -85,7 +85,7 @@
             transform: translateY(-2px);
         }
 
-        /* 天气卡片玻璃态效果 */
+        /* Glassmorphism Weather Card */
         .weather-card {
             background: rgba(255,255,255,0.15);
             backdrop-filter: blur(10px);
@@ -142,7 +142,7 @@
             backdrop-filter: blur(5px);
         }
 
-        /* 5天预报优化 */
+        /* 5-Day Forecast Section */
         .forecast-title {
             font-size: 22px;
             font-weight: 600;
@@ -199,7 +199,7 @@
             margin-top: 5px;
         }
 
-        /* 错误和加载提示 */
+        /* Error & Loading Messages */
         .error-message {
             color: #ff6b6b;
             font-size: 18px;
@@ -220,7 +220,7 @@
             border-radius: 15px;
         }
 
-        /* 响应式适配 */
+        /* Responsive Design */
         @media (max-width: 600px) {
             .header h1 {
                 font-size: 1.8rem;
@@ -240,56 +240,55 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>天气查询应用</h1>
+            <h1>Weather App</h1>
         </div>
 
         <div class="search-box">
-            <input type="text" id="city-input" placeholder="输入城市名，如：Shanghai、Beijing、New York">
-            <button id="search-btn">查询天气</button>
-            <button id="location-btn">使用当前位置</button>
+            <input type="text" id="city-input" placeholder="Enter city name, e.g., Shanghai, London, New York">
+            <button id="search-btn">Get Weather</button>
+            <button id="location-btn">Use My Location</button>
         </div>
 
         <div id="weather-container">
-            <div class="loading">请输入城市名或使用当前位置开始查询</div>
+            <div class="loading">Enter a city name or use your location to start</div>
         </div>
     </div>
 
     <script>
- 
         const API_KEY = '5fbc8bc590ae855685c7c9d3f3a7f19c';
 
-        // DOM 元素
+        // DOM Elements
         const cityInput = document.getElementById('city-input');
         const searchBtn = document.getElementById('search-btn');
         const locationBtn = document.getElementById('location-btn');
         const weatherContainer = document.getElementById('weather-container');
         const body = document.body;
 
-        // 绑定事件
+        // Event Listeners
         searchBtn.addEventListener('click', () => {
             const city = cityInput.value.trim();
             if (city) {
                 getWeatherData(city);
             } else {
-                showError('请输入城市名');
+                showError('Please enter a city name');
             }
         });
 
         locationBtn.addEventListener('click', getLocationWeather);
 
-        // 回车也能查询
+        // Enter key to search
         cityInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 const city = cityInput.value.trim();
                 if (city) {
                     getWeatherData(city);
                 } else {
-                    showError('请输入城市名');
+                    showError('Please enter a city name');
                 }
             }
         });
 
-        // 根据天气动态切换背景
+        // Change background based on weather condition
         function setBackground(weatherMain) {
             const backgrounds = {
                 'Clear': 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
@@ -302,20 +301,20 @@
             body.style.background = backgrounds[weatherMain] || backgrounds['Clear'];
         }
 
-        // 显示错误信息
+        // Display error message
         function showError(message) {
             weatherContainer.innerHTML = `<div class="error-message">❌ ${message}</div>`;
         }
 
-        // 显示加载状态
+        // Display loading state
         function showLoading() {
-            weatherContainer.innerHTML = `<div class="loading">正在获取天气数据...</div>`;
+            weatherContainer.innerHTML = `<div class="loading">Fetching weather data...</div>`;
         }
 
-        // 获取当前位置天气
+        // Get weather using current location
         function getLocationWeather() {
             if (!navigator.geolocation) {
-                showError('你的浏览器不支持定位功能，请手动输入城市名');
+                showError('Geolocation is not supported by your browser');
                 return;
             }
 
@@ -329,39 +328,39 @@
                 (error) => {
                     switch(error.code) {
                         case error.PERMISSION_DENIED:
-                            showError('定位权限被拒绝，请手动输入城市名');
+                            showError('Location permission denied. Please enter a city manually');
                             break;
                         case error.POSITION_UNAVAILABLE:
-                            showError('位置信息不可用，请手动输入城市名');
+                            showError('Location information unavailable. Please enter a city manually');
                             break;
                         case error.TIMEOUT:
-                            showError('获取位置超时，请手动输入城市名');
+                            showError('Location request timed out. Please enter a city manually');
                             break;
                         default:
-                            showError('获取位置失败，请手动输入城市名');
+                            showError('Failed to get location. Please enter a city manually');
                     }
                 }
             );
         }
 
-        // 通过经纬度获取天气
+        // Get weather by coordinates
         async function getWeatherByCoords(lat, lon) {
             showLoading();
             try {
-                // 获取当前天气
+                // Get current weather
                 const currentRes = await fetch(
-                    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=zh_cn`
+                    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=en`
                 );
 
-                if (!currentRes.ok) throw new Error('获取天气数据失败');
+                if (!currentRes.ok) throw new Error('Failed to fetch weather data');
                 const currentData = await currentRes.json();
 
-                // 获取5天预报
+                // Get 5-day forecast
                 const forecastRes = await fetch(
-                    `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=zh_cn`
+                    `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=en`
                 );
 
-                if (!forecastRes.ok) throw new Error('获取预报数据失败');
+                if (!forecastRes.ok) throw new Error('Failed to fetch forecast data');
                 const forecastData = await forecastRes.json();
 
                 renderWeather(currentData, forecastData);
@@ -370,27 +369,27 @@
             }
         }
 
-        // 通过城市名获取天气
+        // Get weather by city name
         async function getWeatherData(city) {
             showLoading();
             try {
-                // 获取当前天气
+                // Get current weather
                 const currentRes = await fetch(
-                    `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric&lang=zh_cn`
+                    `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric&lang=en`
                 );
 
                 if (!currentRes.ok) {
-                    if (currentRes.status === 404) throw new Error('找不到该城市，请检查城市名是否正确');
-                    throw new Error('获取天气数据失败');
+                    if (currentRes.status === 404) throw new Error('City not found. Please check the city name');
+                    throw new Error('Failed to fetch weather data');
                 }
                 const currentData = await currentRes.json();
 
-                // 获取5天预报
+                // Get 5-day forecast
                 const forecastRes = await fetch(
-                    `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric&lang=zh_cn`
+                    `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric&lang=en`
                 );
 
-                if (!forecastRes.ok) throw new Error('获取预报数据失败');
+                if (!forecastRes.ok) throw new Error('Failed to fetch forecast data');
                 const forecastData = await forecastRes.json();
 
                 renderWeather(currentData, forecastData);
@@ -399,24 +398,24 @@
             }
         }
 
-        // 处理API错误
+        // Handle API errors
         function handleApiError(error) {
             console.error('API Error:', error);
-            if (error.message.includes('404') || error.message.includes('找不到')) {
-                showError('❌ 城市不存在，请检查输入的城市名');
-            } else if (error.message.includes('fetch') || error.message.includes('网络')) {
-                showError('❌ 网络错误，请检查你的网络连接');
+            if (error.message.includes('404') || error.message.includes('City not found')) {
+                showError('❌ City not found. Please check the city name');
+            } else if (error.message.includes('fetch') || error.message.includes('network')) {
+                showError('❌ Network error. Please check your internet connection');
             } else {
-                showError(`❌ 获取天气失败：${error.message}`);
+                showError(`❌ Failed to get weather: ${error.message}`);
             }
         }
 
-        // 渲染天气数据
+        // Render weather data to the page
         function renderWeather(current, forecast) {
-            // 设置背景
+            // Set background based on weather
             setBackground(current.weather[0].main);
 
-            // 处理5天预报数据（每天取中午12点的数据）
+            // Process 5-day forecast data (take noon data for each day)
             const dailyForecast = [];
             const dates = new Set();
             for (const item of forecast.list) {
@@ -427,7 +426,7 @@
                 }
             }
 
-            // 渲染HTML
+            // Render HTML
             weatherContainer.innerHTML = `
                 <div class="weather-card">
                     <div class="city-name">${current.name}, ${current.sys.country}</div>
@@ -435,17 +434,17 @@
                     <div class="temperature">${Math.round(current.main.temp)}°C</div>
                     <div class="weather-desc">${current.weather[0].description}</div>
                     <div class="weather-details">
-                        <div class="detail-item">湿度: ${current.main.humidity}%</div>
-                        <div class="detail-item">风速: ${current.wind.speed} m/s</div>
-                        <div class="detail-item">体感温度: ${Math.round(current.main.feels_like)}°C</div>
+                        <div class="detail-item">Humidity: ${current.main.humidity}%</div>
+                        <div class="detail-item">Wind: ${current.wind.speed} m/s</div>
+                        <div class="detail-item">Feels like: ${Math.round(current.main.feels_like)}°C</div>
                     </div>
                 </div>
 
-                <div class="forecast-title">5天天气预报</div>
+                <div class="forecast-title">5-Day Forecast</div>
                 <div class="forecast-container">
                     ${dailyForecast.map(day => `
                         <div class="forecast-day">
-                            <div class="date">${new Date(day.dt * 1000).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })}</div>
+                            <div class="date">${new Date(day.dt * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
                             <img src="https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png" alt="${day.weather[0].description}">
                             <div class="temp">${Math.round(day.main.temp)}°C</div>
                             <div class="desc">${day.weather[0].description}</div>
